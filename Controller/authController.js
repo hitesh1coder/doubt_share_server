@@ -34,11 +34,14 @@ const registeStudent = async (req, res) => {
       process.env.JWT_SECRECT_KEY,
       { expiresIn: 1800 }
     );
-
+    res.cookie("jwt", jwtToken, {
+      httpOnly: true,
+      maxAge: 2 * 24 * 60 * 60 * 1000,
+    });
     return res.status(200).send({
+      status: "success",
       userType: "student",
       name: user.name,
-      status: "success",
       userid: user._id,
       message: "Student Registered successfully",
       token: jwtToken,
@@ -71,25 +74,28 @@ const loginStudent = async (req, res) => {
         message: "Credentials did not match",
       });
     }
-
     const jwtToken = jwt.sign({ email }, process.env.JWT_SECRECT_KEY, {
-      expiresIn: 1800,
+      expiresIn: 2 * 24 * 60 * 60,
+    });
+
+    res.cookie("jwt", jwtToken, {
+      httpOnly: true,
+      maxAge: 2 * 24 * 60 * 60 * 1000,
     });
 
     return res.status(200).send({
-      userType: "student",
       status: "success",
-      message: "Student logged in successfully",
+      userType: "student",
       name: user.name,
       userid: user._id,
+      message: "Student logged in successfully",
       token: jwtToken,
-      userType: "student",
     });
   } catch (error) {
     res.status(503).send({
       error: error,
       status: "failed",
-      message: "Incorrect credentials",
+      message: "something went Wrong",
     });
   }
 };

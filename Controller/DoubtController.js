@@ -21,7 +21,6 @@ const createNewDoubt = async (req, res) => {
 };
 const getStudentDoubts = async (req, res) => {
   const { studentId, sort, subject } = req.query;
-  console.log(sort);
 
   const filter = {};
 

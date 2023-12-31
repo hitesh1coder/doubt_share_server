@@ -32,11 +32,15 @@ const registeTutor = async (req, res) => {
       process.env.JWT_SECRECT_KEY,
       { expiresIn: 1800 }
     );
+    res.cookie("jwt", jwtToken, {
+      httpOnly: true,
+      maxAge: 2 * 24 * 60 * 60 * 1000,
+    });
 
     return res.status(200).send({
+      status: "success",
       userType: "tutor",
       name: user.name,
-      status: "success",
       userid: user._id,
       message: "Tutor Registered successfully",
       token: jwtToken,
@@ -73,15 +77,17 @@ const loginTutor = async (req, res) => {
     const jwtToken = jwt.sign({ email }, process.env.JWT_SECRECT_KEY, {
       expiresIn: 1800,
     });
-
+    res.cookie("jwt", jwtToken, {
+      httpOnly: true,
+      maxAge: 2 * 24 * 60 * 60 * 1000,
+    });
     return res.status(200).send({
-      userType: "tutor",
       status: "success",
-      message: "Tutor logged in successfully",
+      userType: "tutor",
       name: user.name,
       userid: user._id,
+      message: "Tutor logged in successfully",
       token: jwtToken,
-      userType: "tutor",
     });
   } catch (error) {
     res.status(503).send({
