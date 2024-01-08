@@ -1,4 +1,3 @@
-const express = require("express");
 const Session = require("../Models/sessionModel");
 
 const getSession = async (req, res) => {
